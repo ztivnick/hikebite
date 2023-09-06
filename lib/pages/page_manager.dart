@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hikebite/pages/account_page.dart';
+import 'package:hikebite/pages/auth_page.dart';
 import 'package:hikebite/pages/community_page.dart';
 import 'package:hikebite/pages/food_page.dart';
 import 'package:hikebite/pages/home_page.dart';
 import 'package:hikebite/pages/welcome_page.dart';
+import 'package:hikebite/utils/auth.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PageManager extends StatefulWidget {
+class PageManager extends ConsumerStatefulWidget {
   const PageManager({super.key});
 
   @override
-  State<PageManager> createState() => _PageManagerState();
+  PageManagerState createState() => PageManagerState();
 }
 
 enum Tab { home, food, community, account }
 
-class _PageManagerState extends State<PageManager> {
+class PageManagerState extends ConsumerState<PageManager> {
   Tab _currentTab = Tab.home;
-  bool _showWelcomePage = true;
 
   @override
   void initState() {
     super.initState();
-    _checkFirstTimeOpen();
-    FlutterNativeSplash.remove();
-  }
-
-  void _checkFirstTimeOpen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool showWelcomePage = prefs.getBool('showWelcomePage') ?? true;
-
-    setState(() {
-      _showWelcomePage = showWelcomePage;
-    });
+    // FlutterNativeSplash.remove();
   }
 
   Widget _tabsPage() {
@@ -52,50 +44,58 @@ class _PageManagerState extends State<PageManager> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final user = ref.watch(authStateChangesProvider);
 
     return Scaffold(
-        body: _showWelcomePage
-            ? WelcomePage(
-                popWelcomePage: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('showWelcomePage', false);
-                  setState(() {
-                    _showWelcomePage = false;
-                  });
-                },
-              )
-            : _tabsPage(),
-        bottomNavigationBar: _showWelcomePage
-            ? const SizedBox.shrink()
-            : BottomNavigationBar(
-                currentIndex: _currentTab.index,
-                onTap: (index) {
-                  setState(() {
-                    _currentTab = Tab.values[index];
-                  });
-                },
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.dining),
-                    label: 'Food',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.people),
-                    label: 'Community',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle_rounded),
-                    label: 'Account',
-                  ),
-                ],
-                selectedItemColor: colorScheme.tertiary,
-                unselectedItemColor: colorScheme.tertiary,
-              ),
-        backgroundColor: colorScheme.background);
+      body: SafeArea(
+        child: user.when(
+          skipLoadingOnRefresh: true,
+          skipLoadingOnReload: true,
+          data: (user) {
+            if (user == null) {
+              // NOT logged in
+              return const AuthPage();
+            } else {
+              // user IS logged in
+              return _tabsPage();
+            }
+          },
+          error: (e, s) =>const CircularProgressIndicator(),
+          loading: () => const CircularProgressIndicator(),
+        ),
+      ),
+      bottomNavigationBar: (user.value == null)
+          // NOT logged in
+          ? null
+          // user IS logged in
+          : BottomNavigationBar(
+              currentIndex: _currentTab.index,
+              onTap: (index) {
+                setState(() {
+                  _currentTab = Tab.values[index];
+                });
+              },
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.backpack),
+                  label: 'Trips',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.dining),
+                  label: 'Food',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.people),
+                  label: 'Community',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle_rounded),
+                  label: 'Account',
+                ),
+              ],
+              selectedItemColor: colorScheme.tertiary,
+              unselectedItemColor: colorScheme.tertiary,
+            ),
+    );
   }
 }

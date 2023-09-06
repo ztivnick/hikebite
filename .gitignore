@@ -59,3 +59,11 @@ app.*.map.json
 
 # Only use linux build for local testing
 /linux
+
+# Firebase
+google-services.json
+firebase_options.dart
+
+# Freezed (flutter data model generator)
+*.freezed.dart
+*.g.dart

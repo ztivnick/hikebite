@@ -32,8 +32,14 @@ class WelcomePage extends StatelessWidget {
             'Plan your backpacking meals with ease!',
             style: TextStyle(
               fontSize: 16,
-              color:
-                  colorScheme.onBackground,
+              color: colorScheme.onBackground,
+            ),
+          ),
+          Text(
+            'Create, manage, and organize your meal plans before you go on your adventure!',
+            style: TextStyle(
+              fontSize: 16,
+              color: colorScheme.onBackground,
             ),
           ),
           const SizedBox(height: Dimensions.DIVIDER_SIZE_DOUBLE),
@@ -42,8 +48,7 @@ class WelcomePage extends StatelessWidget {
               popWelcomePage.call();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  colorScheme.primary,
+              backgroundColor: colorScheme.primary,
               padding: const EdgeInsets.symmetric(
                   horizontal: Dimensions.DIVIDER_SIZE_DOUBLE,
                   vertical: Dimensions.DIVIDER_SIZE_SMALL),
@@ -56,8 +61,7 @@ class WelcomePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: colorScheme
-                    .onPrimary,
+                color: colorScheme.onPrimary,
               ),
             ),
           ),
