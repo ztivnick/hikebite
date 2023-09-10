@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'firebase_options.dart';
 import 'package:hikebite/utils/Theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'pages/page_manager.dart';
+import 'pages/tab_manager.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

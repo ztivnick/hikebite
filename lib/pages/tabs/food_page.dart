@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hikebite/models/food.dart';
+import 'package:hikebite/pages/create_food.dart';
 import 'package:hikebite/providers/food_provider.dart';
 
 class FoodList extends StatelessWidget {
@@ -23,8 +24,6 @@ class FoodList extends StatelessWidget {
   }
 }
 
-
-
 /// The homepage of our application
 class FoodPage extends StatelessWidget {
   const FoodPage({super.key});
@@ -40,15 +39,14 @@ class FoodPage extends StatelessWidget {
             data: (foodList) => Column(
               children: [
                 ElevatedButton(
-                  // onPressed: () => Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => const CreateFood()),
-                  // ),
-                  onPressed: () {  },
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateFood()),
+                  ),
                   child: const Text("Add New Food"),
                 ),
-                FoodList(foodList: foodList)
+                Expanded(child: FoodList(foodList: foodList))
               ],
             ),
             loading: () => const CircularProgressIndicator(),
