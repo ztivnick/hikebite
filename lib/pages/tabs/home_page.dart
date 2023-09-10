@@ -43,6 +43,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   name: "Apple",
                   calories: 95,
                   weight: 4,
+                  category: FoodCategory.snack,
                 );
 
                 final collection = FirebaseFirestore.instance
@@ -55,6 +56,15 @@ class HomePageState extends ConsumerState<HomePage> {
                       toFirestore: (food, _) => food.toJson(),
                     );
 
+                await collection
+                    .where("name", isEqualTo: "Apple")
+                    .get()
+                    .then((apples) {
+                  for (var apple in apples.docs) {
+                    collection.doc(apple.id).delete();
+                  }
+                });
+
                 collection.add(appleFood);
                 collection.get().then((event) {
                   for (var doc in event.docs) {
@@ -62,7 +72,7 @@ class HomePageState extends ConsumerState<HomePage> {
                   }
                 });
               },
-              child: const Text("firestore read"),
+              child: const Text("firestore test"),
             )
           ]);
         },

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hikebite/pages/account_page.dart';
+import 'package:hikebite/pages/tabs/account_page.dart';
 import 'package:hikebite/pages/auth_page.dart';
-import 'package:hikebite/pages/community_page.dart';
-import 'package:hikebite/pages/food_page.dart';
-import 'package:hikebite/pages/home_page.dart';
+import 'package:hikebite/pages/tabs/community_page.dart';
+import 'package:hikebite/pages/tabs/food_page.dart';
+import 'package:hikebite/pages/tabs/home_page.dart';
 import 'package:hikebite/pages/welcome_page.dart';
 import 'package:hikebite/utils/auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
